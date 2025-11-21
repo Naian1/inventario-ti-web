@@ -2,7 +2,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import Layout from '@/components/Layout';
 import { getInitialData } from '@/lib/localStorage';
-import type { Category, Item } from '@/lib/types';
+import type { Category, Item, Field } from '@/lib/types';
 import { 
   BarChart, Bar, PieChart, Pie, LineChart, Line, 
   XAxis, YAxis, CartesianGrid, Tooltip, 
@@ -24,6 +24,7 @@ interface ChartConfig {
 export default function DashboardPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [items, setItems] = useState<Item[]>([]);
+  const [fields, setFields] = useState<Field[]>([]);
   const [charts, setCharts] = useState<ChartConfig[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editingChart, setEditingChart] = useState<ChartConfig | null>(null);
@@ -44,6 +45,7 @@ export default function DashboardPage() {
     const data = getInitialData();
     setCategories(data.categories);
     setItems(data.items);
+    setFields(data.fields || []);
   };
 
   const loadCharts = () => {
@@ -134,23 +136,14 @@ export default function DashboardPage() {
   };
 
   const availableFields = useMemo(() => {
-    const fieldsMap = new Map<string, { name: string; type: string }>();
-    
-    categories.forEach(category => {
-      if (category.fields && Array.isArray(category.fields)) {
-        category.fields.forEach(field => {
-          if (!fieldsMap.has(field.key)) {
-            fieldsMap.set(field.key, { name: field.name, type: field.type });
-          }
-        });
-      }
+    // Use global fields list from storage (more reliable)
+    const unique = new Map<string, { name: string; type: string }>();
+    (fields || []).forEach(f => {
+      if (!unique.has(f.key)) unique.set(f.key, { name: f.name, type: f.type });
     });
-    
-    return Array.from(fieldsMap.entries()).map(([key, value]) => ({
-      key,
-      ...value,
-    }));
-  }, [categories]);
+
+    return Array.from(unique.entries()).map(([key, value]) => ({ key, ...value }));
+  }, [fields]);
 
   return (
     <Layout>
@@ -179,7 +172,9 @@ export default function DashboardPage() {
           <div className="panel bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-2xl">📊</span>
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3v18h18" />
+                </svg>
               </div>
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Total de Itens</p>
@@ -191,7 +186,9 @@ export default function DashboardPage() {
           <div className="panel bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-2xl">📁</span>
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h4l2 3h10v9H3V7z" />
+                </svg>
               </div>
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Categorias</p>
@@ -203,7 +200,9 @@ export default function DashboardPage() {
           <div className="panel bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-2xl">📈</span>
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 17l6-6 4 4 8-8" />
+                </svg>
               </div>
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Gráficos Criados</p>
@@ -216,7 +215,9 @@ export default function DashboardPage() {
         {charts.length === 0 ? (
           <div className="panel text-center py-16">
             <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <span className="text-4xl">📊</span>
+              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3v18h18" />
+              </svg>
             </div>
             <h3 className="text-2xl font-bold mb-3">Nenhum gráfico criado</h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
@@ -289,7 +290,7 @@ export default function DashboardPage() {
                             : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'
                         }`}
                       >
-                        {type === 'bar' ? '📊 Barras' : type === 'pie' ? '🥧 Pizza' : '📈 Linha'}
+                        {type === 'bar' ? 'Barras' : type === 'pie' ? 'Pizza' : 'Linha'}
                       </button>
                     ))}
                   </div>
@@ -312,7 +313,7 @@ export default function DashboardPage() {
                             : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'
                         }`}
                       >
-                        {mode === 'category' ? '📁 Categorias' : '🏷️ Campo Específico'}
+                        {mode === 'category' ? 'Categorias' : 'Campo Específico'}
                       </button>
                     ))}
                   </div>
@@ -425,7 +426,7 @@ function ChartCard({
       const valuesMap = new Map<string, number>();
       
       filteredItems.forEach(item => {
-        const value = item.data[chart.selectedField!];
+        const value = (item as any)[chart.selectedField!];
         if (value !== undefined && value !== null && value !== '') {
           const strValue = String(value);
           valuesMap.set(strValue, (valuesMap.get(strValue) || 0) + 1);
@@ -521,10 +522,14 @@ function ChartCard({
         </div>
         <div className="flex gap-2">
           <button onClick={onEdit} className="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center" title="Editar">
-            ✏️
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
           </button>
           <button onClick={onDelete} className="w-8 h-8 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 flex items-center justify-center text-red-600" title="Excluir">
-            🗑️
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
           </button>
         </div>
       </div>

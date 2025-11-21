@@ -6,6 +6,7 @@ import { SearchBar } from './SearchBar';
 import { ThemeToggle } from './ThemeToggle';
 import { UserSwitcher } from './UserSwitcher';
 import { isAdmin } from '@/lib/localStorage';
+import QuickActionsFloating from './QuickActionsFloating';
 
 export default function Layout({ children }: PropsWithChildren) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -16,12 +17,49 @@ export default function Layout({ children }: PropsWithChildren) {
     setIsAdminUser(isAdmin());
   }, []);
 
+  // Ensure sidebar is closed by default on small screens and opened on large screens
+  useEffect(() => {
+    const applyInitial = () => {
+      try {
+        const isLarge = window.innerWidth >= 1024; // lg breakpoint
+        setSidebarOpen(isLarge);
+      } catch (e) {
+        // ignore during SSR
+      }
+    };
+
+    applyInitial();
+    const onResize = () => applyInitial();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
   const navItems = [
-    { href: '/painel', label: 'Painel', icon: '📋', adminOnly: false },
-    { href: '/dashboard', label: 'Dashboard', icon: '📊', adminOnly: false },
-    { href: '/categories', label: 'Minhas Categorias', icon: '📁', adminOnly: false },
-    { href: '/manage-categories', label: 'Gerenciar Categorias', icon: '⚙️', adminOnly: true },
-    { href: '/reports', label: 'Relatórios', icon: '📈', adminOnly: false },
+    { href: '/painel', label: 'Painel', icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h18v18H3z" />
+      </svg>
+    ), adminOnly: false },
+    { href: '/dashboard', label: 'Dashboard', icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 13h8V3H3v10zM13 21h8V11h-8v10z" />
+      </svg>
+    ), adminOnly: false },
+    { href: '/categories', label: 'Minhas Categorias', icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h4l2 3h10v9H3V7z" />
+      </svg>
+    ), adminOnly: false },
+    { href: '/manage-categories', label: 'Gerenciar Categorias', icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3" />
+      </svg>
+    ), adminOnly: true },
+    { href: '/reports', label: 'Relatórios', icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3v18h18" />
+      </svg>
+    ), adminOnly: false },
   ];
 
   const isActive = (href: string) => pathname === href || pathname?.startsWith(href + '/');
@@ -68,7 +106,7 @@ export default function Layout({ children }: PropsWithChildren) {
 
         <div className="mt-auto space-y-4">
           <div className="panel bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-4">
-            <p className="text-sm font-medium mb-2">💡 Dica</p>
+            <p className="text-sm font-medium mb-2">Dica</p>
             <p className="text-xs text-gray-600 dark:text-gray-400">
               Use Ctrl+K para buscar rapidamente
             </p>
@@ -109,6 +147,7 @@ export default function Layout({ children }: PropsWithChildren) {
           <p>© 2025 Inventário TI - Sistema de Gestão de Equipamentos</p>
         </footer>
       </div>
+      <QuickActionsFloating />
     </div>
   );
 }

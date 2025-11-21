@@ -5,7 +5,7 @@ import { getInitialData } from '@/lib/localStorage';
 import type { Category, Item } from '@/lib/types';
 import Link from 'next/link';
 import { InlineImport } from '@/components/InlineImport';
-import { StatsCard, CategoryDistribution, RecentActivity, QuickActions } from '@/components/DashboardWidgets';
+import { StatsCard, CategoryDistribution, RecentActivity } from '@/components/DashboardWidgets';
 
 export default function DashboardPage() {
   const [data, setData] = useState<{
@@ -61,21 +61,21 @@ export default function DashboardPage() {
           <StatsCard
             title="Total de Itens"
             value={stats.totalItems}
-            icon="📦"
+            icon={<svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h4l2 3h10v9H3V7z" /></svg>}
             gradient="bg-gradient-to-br from-blue-500 to-blue-600"
             description={`${stats.totalItems} equipamentos cadastrados`}
           />
           <StatsCard
             title="Categorias"
             value={stats.totalCategories}
-            icon="📁"
+            icon={<svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h4l2 3h10v9H3V7z" /></svg>}
             gradient="bg-gradient-to-br from-purple-500 to-purple-600"
             description={`${stats.totalCategories} categorias ativas`}
           />
           <StatsCard
             title="Adicionados Hoje"
             value={stats.recentlyAdded}
-            icon="✨"
+            icon={<svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v12m0 0l4-4m-4 4l-4-4" /></svg>}
             gradient="bg-gradient-to-br from-green-500 to-green-600"
             description="Novos itens no sistema"
             trend={{ value: 12, isPositive: true }}
@@ -89,7 +89,7 @@ export default function DashboardPage() {
             <div className="panel">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white text-xl">📥</span>
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v12m0 0l4-4m-4 4l-4-4M21 21H3" /></svg>
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold">Importar Dados</h2>
@@ -107,7 +107,6 @@ export default function DashboardPage() {
 
           {/* Sidebar Widgets */}
           <div className="space-y-6">
-            <QuickActions />
             <RecentActivity />
           </div>
         </div>

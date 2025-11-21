@@ -214,7 +214,7 @@ export function SearchBar() {
   return (
     <>
     {open && !showGroupedView && (() => {
-      console.log('🔵 MODAL DE BUSCA ABERTO', {open, showGroupedView});
+      console.log('Modal de busca aberto', {open, showGroupedView});
       return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-20 z-50 animate-fade-in"
          onClick={() => setOpen(false)}>
@@ -301,23 +301,23 @@ export function SearchBar() {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    console.log('🔍 Botão Buscar Geral clicado!');
+                    console.log('Botão Buscar Geral clicado');
                     
                     // Force search with current filters
                     const data = getInitialData();
                     let filteredItems = [...data.items];
                     
-                    console.log('📊 Total de itens:', filteredItems.length);
+                    console.log('Total de itens:', filteredItems.length);
                     
                     // Apply category filter
                     if (selectedCategories.length > 0 && selectedCategories.length < data.categories.length) {
                       filteredItems = filteredItems.filter(item => selectedCategories.includes(item.categoryId));
-                      console.log('📁 Após filtro de categoria:', filteredItems.length);
+                      console.log('Após filtro de categoria:', filteredItems.length);
                     }
                     
                     // Apply field filters
                     if (Object.keys(filters).length > 0) {
-                      console.log('🔎 Aplicando filtros:', filters);
+                      console.log('Aplicando filtros:', filters);
                       filteredItems = filteredItems.filter(item => {
                         return Object.entries(filters).every(([field, value]) => {
                           const filterValue = value.trim().toLowerCase();
@@ -327,12 +327,12 @@ export function SearchBar() {
                           return String(itemValue).toLowerCase().includes(filterValue);
                         });
                       });
-                      console.log('✅ Após filtros de campo:', filteredItems.length);
+                      console.log('Após filtros de campo:', filteredItems.length);
                     }
                     
                     // Apply text search if any - EXACT MATCH ONLY
                     if (query.trim()) {
-                      console.log('📝 Busca por texto:', query);
+                      console.log('Busca por texto:', query);
                       const searchQuery = query.trim().toLowerCase();
                       filteredItems = filteredItems.filter(item => {
                         return Object.entries(item).some(([key, value]) => {
@@ -340,7 +340,7 @@ export function SearchBar() {
                           return String(value || '').toLowerCase().includes(searchQuery);
                         });
                       });
-                      console.log('🎯 Após busca de texto:', filteredItems.length);
+                      console.log('Após busca de texto:', filteredItems.length);
                     }
                     
                     if (filteredItems.length === 0) {
@@ -348,7 +348,7 @@ export function SearchBar() {
                       return;
                     }
                     
-                    console.log('✨ Abrindo resultados com', filteredItems.length, 'itens');
+                    console.log('Abrindo resultados com', filteredItems.length, 'itens');
                     
                     // Open modal with results
                     setModalResults(filteredItems);
@@ -360,14 +360,14 @@ export function SearchBar() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
-                  🔍 Buscar Geral (Tela Cheia)
+                  Buscar Geral (Tela Cheia)
                 </button>
               </div>
 
               {/* Category Filter */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-semibold text-sm">📁 Categorias</h4>
+                  <h4 className="font-semibold text-sm">Categorias</h4>
                   <div className="flex gap-2">
                     <button
                       onClick={selectAllCategories}
@@ -402,8 +402,8 @@ export function SearchBar() {
 
               {/* Field Filters */}
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-semibold text-sm">🔍 Filtrar por Campo</h4>
+                  <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-semibold text-sm">Filtrar por Campo</h4>
                   <span className="text-xs text-gray-500">{availableFields.size} campos disponíveis</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-48 overflow-auto">
@@ -449,8 +449,8 @@ export function SearchBar() {
               <p className="text-gray-500 dark:text-gray-400 text-sm">
                 Digite para buscar ou use filtros para encontrar equipamentos específicos
               </p>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
-                💡 Dica: Combine busca de texto com filtros de campo para resultados precisos
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+                Dica: Combine busca de texto com filtros de campo para resultados precisos
               </p>
             </div>
           )}
@@ -586,8 +586,7 @@ export function SearchBar() {
                 }`}
                 title={groupByCategory ? 'Clique em "Buscar Geral" no filtro para ver tela cheia' : 'Ativar modo agrupado'}
               >
-                <span className="text-base">{groupByCategory ? '📁' : '📋'}</span>
-                <span>{groupByCategory ? 'Agrupado' : 'Lista'}</span>
+                <span className="text-base">{groupByCategory ? 'Agrupado' : 'Lista'}</span>
               </button>
             </div>
             <div className="flex items-center gap-2">

@@ -118,7 +118,7 @@ export function SearchResultsModal({ isOpen, onClose, results: initialResults, q
             <div className="px-6 py-4 flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-white mb-1">
-                  📁 Resultados da Busca
+                  Resultados da Busca
                 </h1>
                 <p className="text-sm text-gray-400">
                   {results.length} resultado(s) encontrado(s)
@@ -250,7 +250,7 @@ export function SearchResultsModal({ isOpen, onClose, results: initialResults, q
             <div className="bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-auto">
               <div className="sticky top-0 bg-gray-800 border-b border-gray-700 p-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-2xl font-bold text-white">✏️ Editar Item</h3>
+                  <h3 className="text-2xl font-bold text-white">Editar Item</h3>
                   <button
                     onClick={() => {
                       setEditingItem(null);
@@ -300,7 +300,7 @@ export function SearchResultsModal({ isOpen, onClose, results: initialResults, q
                   onClick={handleSave}
                   className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
                 >
-                  💾 Salvar Alterações
+                  Salvar Alterações
                 </button>
               </div>
             </div>

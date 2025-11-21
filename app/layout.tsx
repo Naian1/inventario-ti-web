@@ -20,6 +20,7 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR" className={theme}>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Script id="theme-script" strategy="beforeInteractive">
           {`
             (function() {

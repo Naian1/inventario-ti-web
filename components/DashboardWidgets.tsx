@@ -6,7 +6,7 @@ import type { Category } from '@/lib/types';
 interface StatsCardProps {
   title: string;
   value: number;
-  icon: string;
+  icon: React.ReactNode;
   gradient: string;
   description?: string;
   trend?: { value: number; isPositive: boolean };
@@ -109,9 +109,21 @@ export function CategoryDistribution() {
 
 export function RecentActivity() {
   const activities = [
-    { id: 1, action: 'Importação', description: '50 computadores importados', time: '2 horas atrás', icon: '📥', color: 'bg-blue-500' },
-    { id: 2, action: 'Atualização', description: 'Setor 9º andar atualizado', time: '5 horas atrás', icon: '✏️', color: 'bg-green-500' },
-    { id: 3, action: 'Nova Categoria', description: 'Televisões criada', time: '1 dia atrás', icon: '📁', color: 'bg-purple-500' },
+    { id: 1, action: 'Importação', description: '50 computadores importados', time: '2 horas atrás', icon: (
+      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v12m0 0l4-4m-4 4l-4-4M21 21H3" />
+      </svg>
+    ), color: 'bg-blue-500' },
+    { id: 2, action: 'Atualização', description: 'Setor 9º andar atualizado', time: '5 horas atrás', icon: (
+      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5" />
+      </svg>
+    ), color: 'bg-green-500' },
+    { id: 3, action: 'Nova Categoria', description: 'Televisões criada', time: '1 dia atrás', icon: (
+      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h4l2 3h10v9H3V7z" />
+      </svg>
+    ), color: 'bg-purple-500' },
   ];
 
   return (
@@ -135,28 +147,4 @@ export function RecentActivity() {
   );
 }
 
-export function QuickActions() {
-  const actions = [
-    { label: 'Importar CSV', icon: '📥', color: 'from-blue-500 to-blue-600' },
-    { label: 'Nova Categoria', icon: '📁', color: 'from-purple-500 to-purple-600' },
-    { label: 'Exportar Dados', icon: '📤', color: 'from-green-500 to-green-600' },
-    { label: 'Relatório', icon: '📊', color: 'from-orange-500 to-orange-600' },
-  ];
-
-  return (
-    <div className="panel">
-      <h3 className="text-lg font-semibold mb-4">Ações Rápidas</h3>
-      <div className="grid grid-cols-2 gap-3">
-        {actions.map((action) => (
-          <button
-            key={action.label}
-            className={`p-4 bg-gradient-to-br ${action.color} text-white rounded-lg hover:shadow-lg transition-all duration-200 hover:-translate-y-1 flex flex-col items-center gap-2 group`}
-          >
-            <span className="text-2xl group-hover:scale-110 transition-transform">{action.icon}</span>
-            <span className="text-sm font-medium">{action.label}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
+// Inline quick-actions panel removed. Use `QuickActionsFloating` for floating actions.
